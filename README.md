@@ -23,37 +23,8 @@ A production-grade real-time event streaming and anomaly detection pipeline that
                            │  Kibana Dashboards    │
                            │  (20+ stakeholders)   │
                            └──────────────────────┘
-```
 
-### Key Metrics
 
-| Metric | Value |
-|---|---|
-| Throughput | 2M+ events / day |
-| Anomaly detection latency | < 500 ms |
-| Uptime (AWS Kinesis) | 99.95% |
-| Peak traffic headroom | 3× surge handled |
-| Analyst triage time reduction | 72% |
-| Dashboard data freshness | 10 seconds |
-| Stakeholders served | 20+ |
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Event streaming | Apache Kafka 3.6, AWS Kinesis |
-| Stream processing | Apache Spark 3.5 Structured Streaming |
-| Anomaly detection | Windowed aggregations (tumbling + sliding) |
-| LLM summarization | OpenAI GPT-4o via direct API |
-| Storage & search | Elasticsearch 8.x |
-| Visualization | Kibana dashboards |
-| Containerization | Docker, docker-compose |
-| Cloud | AWS (Kinesis, EC2 auto-scaling, CloudWatch) |
-| CI/CD | GitHub Actions |
-
----
 
 ## Project Structure
 
