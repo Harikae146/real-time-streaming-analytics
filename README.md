@@ -1,11 +1,5 @@
 # Real-Time Streaming Analytics with LLM Summarization
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)
-![Kafka](https://img.shields.io/badge/Apache%20Kafka-3.6-black?logo=apachekafka)
-![Spark](https://img.shields.io/badge/Apache%20Spark-3.5-orange?logo=apachespark)
-![AWS](https://img.shields.io/badge/AWS%20Kinesis-deployed-yellow?logo=amazonaws)
-![Elasticsearch](https://img.shields.io/badge/Elasticsearch-8.x-teal?logo=elasticsearch)
-![GPT-4o](https://img.shields.io/badge/GPT--4o-integrated-green?logo=openai)
 
 A production-grade real-time event streaming and anomaly detection pipeline that processes **2M+ events/day**, detects anomalies within **500ms** using windowed Spark aggregations, and generates automated natural-language incident summaries via **GPT-4o** — reducing analyst triage time by **72%**.
 
@@ -87,16 +81,7 @@ real-time-streaming-analytics/
 └── .github/workflows/ci.yml     # CI: lint, type-check, unit tests
 ```
 
----
 
-## Quick Start
-
-### Prerequisites
-
-- Python 3.10+
-- Docker & docker-compose
-- OpenAI API key (GPT-4o access)
-- AWS credentials (for Kinesis deployment)
 
 ### 1. Clone & install dependencies
 
@@ -201,14 +186,4 @@ Reports are indexed to Elasticsearch and surface in Kibana with **10-second fres
 
 ---
 
-## Running Tests
 
-```bash
-pytest tests/ -v --cov=. --cov-report=term-missing
-```
-
----
-
-## License
-
-MIT
