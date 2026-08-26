@@ -1,0 +1,78 @@
+{
+  "analytics_events": {
+    "settings": {
+      "number_of_shards": 3,
+      "number_of_replicas": 1,
+      "refresh_interval": "1s",
+      "index.mapping.total_fields.limit": 200
+    },
+    "mappings": {
+      "dynamic": "strict",
+      "properties": {
+        "event_id":      { "type": "keyword" },
+        "timestamp":     { "type": "date", "format": "strict_date_optional_time" },
+        "epoch_ms":      { "type": "long" },
+        "service":       { "type": "keyword" },
+        "event_type":    { "type": "keyword" },
+        "region":        { "type": "keyword" },
+        "user_id":       { "type": "keyword" },
+        "session_id":    { "type": "keyword" },
+        "latency_ms":    { "type": "float" },
+        "status_code":   { "type": "integer" },
+        "is_anomaly":    { "type": "boolean" },
+        "anomaly_type":  { "type": "keyword" },
+        "payload_bytes": { "type": "integer" },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "client":  { "type": "keyword" },
+            "version": { "type": "keyword" }
+          }
+        }
+      }
+    }
+  },
+
+  "anomaly_reports": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1,
+      "refresh_interval": "1s"
+    },
+    "mappings": {
+      "properties": {
+        "service":          { "type": "keyword" },
+        "anomaly_type":     { "type": "keyword" },
+        "window_start":     { "type": "date" },
+        "window_end":       { "type": "date" },
+        "detected_at":      { "type": "date" },
+        "event_count":      { "type": "long" },
+        "prev_event_count": { "type": "long" },
+        "error_count":      { "type": "long" },
+        "avg_latency_ms":   { "type": "float" },
+        "p99_latency_ms":   { "type": "float" },
+        "baseline_p99":     { "type": "float" },
+        "drop_pct":         { "type": "float" },
+        "severity":         { "type": "keyword" }
+      }
+    }
+  },
+
+  "llm_summaries": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1,
+      "refresh_interval": "5s"
+    },
+    "mappings": {
+      "properties": {
+        "summary":        { "type": "text", "analyzer": "english" },
+        "anomaly_count":  { "type": "integer" },
+        "services":       { "type": "keyword" },
+        "anomaly_types":  { "type": "keyword" },
+        "generated_at":   { "type": "date" },
+        "model":          { "type": "keyword" }
+      }
+    }
+  }
+}
