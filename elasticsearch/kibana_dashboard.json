@@ -1,0 +1,149 @@
+{
+  "_meta": {
+    "description": "Real-Time Streaming Analytics — Kibana dashboard export",
+    "version": "8.11",
+    "panels": 8,
+    "data_freshness": "10 seconds",
+    "stakeholders": "20+"
+  },
+  "objects": [
+    {
+      "id": "analytics-main-dashboard",
+      "type": "dashboard",
+      "attributes": {
+        "title": "Real-Time Streaming Analytics",
+        "description": "Live event throughput, anomaly detection, and LLM summary reports",
+        "timeRestore": true,
+        "timeFrom": "now-1h",
+        "timeTo": "now",
+        "refreshInterval": { "pause": false, "value": 10000 },
+        "panelsJSON": "[{\"embeddableConfig\":{\"title\":\"Events / Second\"},\"gridData\":{\"h\":8,\"i\":\"1\",\"w\":12,\"x\":0,\"y\":0},\"panelRefName\":\"panel_1\",\"version\":\"8.11.0\"},{\"embeddableConfig\":{\"title\":\"Anomalies Detected\"},\"gridData\":{\"h\":8,\"i\":\"2\",\"w\":12,\"x\":12,\"y\":0},\"panelRefName\":\"panel_2\",\"version\":\"8.11.0\"},{\"embeddableConfig\":{\"title\":\"p99 Latency by Service (ms)\"},\"gridData\":{\"h\":10,\"i\":\"3\",\"w\":24,\"x\":0,\"y\":8},\"panelRefName\":\"panel_3\",\"version\":\"8.11.0\"},{\"embeddableConfig\":{\"title\":\"Error Rate by Service\"},\"gridData\":{\"h\":10,\"i\":\"4\",\"w\":24,\"x\":0,\"y\":18},\"panelRefName\":\"panel_4\",\"version\":\"8.11.0\"},{\"embeddableConfig\":{\"title\":\"LLM Anomaly Summaries\"},\"gridData\":{\"h\":12,\"i\":\"5\",\"w\":24,\"x\":0,\"y\":28},\"panelRefName\":\"panel_5\",\"version\":\"8.11.0\"},{\"embeddableConfig\":{\"title\":\"Throughput Heatmap\"},\"gridData\":{\"h\":8,\"i\":\"6\",\"w\":24,\"x\":0,\"y\":40},\"panelRefName\":\"panel_6\",\"version\":\"8.11.0\"},{\"embeddableConfig\":{\"title\":\"Active Anomalies — Last 10 min\"},\"gridData\":{\"h\":8,\"i\":\"7\",\"w\":12,\"x\":0,\"y\":48},\"panelRefName\":\"panel_7\",\"version\":\"8.11.0\"},{\"embeddableConfig\":{\"title\":\"Consumer Lag\"},\"gridData\":{\"h\":8,\"i\":\"8\",\"w\":12,\"x\":12,\"y\":48},\"panelRefName\":\"panel_8\",\"version\":\"8.11.0\"}]",
+        "optionsJSON": "{\"hidePanelTitles\":false,\"useMargins\":true}"
+      }
+    },
+    {
+      "id": "panel_1_events_per_second",
+      "type": "visualization",
+      "attributes": {
+        "title": "Events / Second",
+        "visState": {
+          "type": "metric",
+          "aggs": [
+            {
+              "id": "1",
+              "type": "count",
+              "schema": "metric",
+              "params": {}
+            }
+          ],
+          "params": {
+            "addTooltip": true,
+            "addLegend": false,
+            "type": "metric",
+            "metric": {
+              "percentageMode": false,
+              "useRanges": false,
+              "colorSchema": "Green to Red",
+              "metricColorMode": "None",
+              "colorsRange": [{ "from": 0, "to": 10000 }],
+              "labels": { "show": true },
+              "invertColors": false,
+              "style": { "bgFill": "#000", "bgColor": false, "labelColor": false, "subText": "", "fontSize": 60 }
+            }
+          }
+        },
+        "savedSearchRefName": "search_analytics_events"
+      }
+    },
+    {
+      "id": "panel_3_p99_latency",
+      "type": "visualization",
+      "attributes": {
+        "title": "p99 Latency by Service (ms)",
+        "visState": {
+          "type": "line",
+          "aggs": [
+            {
+              "id": "1",
+              "type": "percentiles",
+              "schema": "metric",
+              "params": { "field": "latency_ms", "percents": [99], "json": "" }
+            },
+            {
+              "id": "2",
+              "type": "date_histogram",
+              "schema": "segment",
+              "params": { "field": "@timestamp", "fixed_interval": "10s", "min_doc_count": 1 }
+            },
+            {
+              "id": "3",
+              "type": "terms",
+              "schema": "group",
+              "params": { "field": "service", "size": 8, "order": "desc", "orderBy": "1" }
+            }
+          ],
+          "params": {
+            "type": "line",
+            "grid": { "categoryLines": false, "style": { "color": "#eee" } },
+            "categoryAxes": [{ "type": "category", "position": "bottom" }],
+            "valueAxes": [{ "name": "LeftAxis-1", "type": "value", "position": "left", "show": true }],
+            "thresholdLine": { "show": true, "value": 500, "width": 2, "style": "full", "color": "#E7664C" }
+          }
+        },
+        "savedSearchRefName": "search_analytics_events"
+      }
+    },
+    {
+      "id": "panel_5_llm_summaries",
+      "type": "visualization",
+      "attributes": {
+        "title": "LLM Anomaly Summaries",
+        "visState": {
+          "type": "table",
+          "aggs": [
+            { "id": "1", "type": "count", "schema": "metric", "params": {} },
+            { "id": "2", "type": "terms", "schema": "bucket", "params": { "field": "generated_at", "size": 10, "order": "desc" } },
+            { "id": "3", "type": "terms", "schema": "bucket", "params": { "field": "services", "size": 5 } }
+          ],
+          "params": {
+            "perPage": 10,
+            "showPartialRows": false,
+            "showMetricsAtAllLevels": false,
+            "sort": { "columnIndex": null, "direction": null },
+            "showTotal": false,
+            "dimensions": { "buckets": [], "metrics": [] }
+          }
+        },
+        "savedSearchRefName": "search_llm_summaries"
+      }
+    },
+    {
+      "id": "search_analytics_events",
+      "type": "search",
+      "attributes": {
+        "title": "analytics-events-*",
+        "description": "",
+        "hits": 0,
+        "columns": ["service", "event_type", "latency_ms", "status_code", "is_anomaly"],
+        "sort": [["@timestamp", "desc"]],
+        "kibanaSavedObjectMeta": {
+          "searchSourceJSON": "{\"index\":\"analytics-events-*\",\"filter\":[],\"query\":{\"query\":\"\",\"language\":\"kuery\"}}"
+        }
+      }
+    },
+    {
+      "id": "search_llm_summaries",
+      "type": "search",
+      "attributes": {
+        "title": "llm-summaries-*",
+        "description": "GPT-4o generated anomaly reports",
+        "hits": 0,
+        "columns": ["generated_at", "services", "anomaly_types", "anomaly_count", "summary"],
+        "sort": [["generated_at", "desc"]],
+        "kibanaSavedObjectMeta": {
+          "searchSourceJSON": "{\"index\":\"llm-summaries-*\",\"filter\":[],\"query\":{\"query\":\"\",\"language\":\"kuery\"}}"
+        }
+      }
+    }
+  ]
+}
