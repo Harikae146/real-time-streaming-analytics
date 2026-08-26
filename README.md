@@ -28,29 +28,7 @@ A production-grade real-time event streaming and anomaly detection pipeline that
 
 ## Project Structure
 
-```
-real-time-streaming-analytics/
-├── config/
-│   └── settings.py              # Centralized config (Kafka, Kinesis, ES, OpenAI)
-├── producer/
-│   ├── event_generator.py       # Synthetic event data factory
-│   └── kafka_producer.py        # High-throughput Kafka producer (2M+ events/day)
-├── consumer/
-│   └── spark_streaming.py       # Spark Structured Streaming + windowed anomaly detection
-├── llm/
-│   └── anomaly_summarizer.py    # GPT-4o integration for NL anomaly report generation
-├── kinesis/
-│   └── kinesis_consumer.py      # AWS Kinesis consumer with auto-scaling groups
-├── elasticsearch/
-│   ├── index_mapping.json       # ES index schema for events & anomalies
-│   └── kibana_dashboard.json    # Kibana dashboard export (20+ panels)
-├── monitoring/
-│   └── metrics.py               # Prometheus metrics + CloudWatch integration
-├── docker-compose.yml           # Local dev: Kafka + Zookeeper + ES + Kibana + Spark
-├── requirements.txt
-├── .env.example
-└── .github/workflows/ci.yml     # CI: lint, type-check, unit tests
-```
+
 
 
 
